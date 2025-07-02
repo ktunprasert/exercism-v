@@ -3,7 +3,7 @@ module main
 fn score(word string) int {
 	mut total := 0
 
-	for c in word.to_lower_ascii() {
+	for c in word.to_lower() {
 		match c {
 			`d`, `g` { total += 2 }
 			`b`, `c`, `m`, `p` { total += 3 }
