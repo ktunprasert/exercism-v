@@ -9,7 +9,7 @@ local entries = {
     {
         " v:test",
         function() Snacks.terminal(("v -stats test %s"):format(vim.fn.expand("%:h")), term_ops) end,
-        "t",
+        "<space>",
     },
     {
         "󰕒 submit",
