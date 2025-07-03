@@ -7,29 +7,32 @@ fn transpose(lines []string) []string {
 		return []string{}
 	}
 
-	lens := lines.map(it.len)
-	trim_from := arrays.min(lens) or { panic('huh') }
-	// println('trim_from: ${trim_from}')
-	max_row := arrays.max(lens) or { panic('huh') }
-	// mut transposed := [][]u8{len: max_row, init: []u8{len: lines.len, init: ` `}}
-	mut transposed := [][]rune{len: max_row, init: []rune{len: lines.len, init: ` `}}
+	mut max_len := arrays.max(lines.map(it.len)) or { panic('huh') }
+	mut result := []string{}
 
-	for i, line in lines {
-		for j, c in line {
-			transposed[j][i] = c
+	for col in 0 .. max_len {
+		mut new_line := []rune{}
+		for row_idx, line in lines {
+			if col < line.len {
+				new_line << line[col]
+				continue
+			}
+
+			mut add_space := false
+			for idx := row_idx + 1; idx < lines.len; idx++ {
+				if col < lines[idx].len {
+					add_space = true
+					break
+				}
+			}
+
+			if add_space {
+				new_line << ` `
+			}
 		}
+
+		result << new_line.string()
 	}
 
-	mut output := []string{cap: transposed.len}
-	for i, row in transposed {
-		mut row_str := '${row.string()}'
-
-		if i > trim_from {
-			row_str = row_str.trim_space_right()
-		}
-
-		output << row_str
-	}
-
-	return output
+	return result
 }

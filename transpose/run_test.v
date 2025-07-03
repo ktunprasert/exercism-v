@@ -1,66 +1,66 @@
 module main
 
-// fn test_empty_string() {
-// 	lines := []string{}
-// 	expect := []string{}
-// 	assert transpose(lines) == expect
-// }
+fn test_empty_string() {
+	lines := []string{}
+	expect := []string{}
+	assert transpose(lines) == expect
+}
 
-// fn test_two_characters_in_a_row() {
-// 	lines := [
-// 		'A1',
-// 	]
-// 	expect := [
-// 		'A',
-// 		'1',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_two_characters_in_a_row() {
+	lines := [
+		'A1',
+	]
+	expect := [
+		'A',
+		'1',
+	]
+	assert transpose(lines) == expect
+}
 
-// fn test_two_characters_in_a_column() {
-// 	lines := [
-// 		'A',
-// 		'1',
-// 	]
-// 	expect := [
-// 		'A1',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_two_characters_in_a_column() {
+	lines := [
+		'A',
+		'1',
+	]
+	expect := [
+		'A1',
+	]
+	assert transpose(lines) == expect
+}
 
-// fn test_simple() {
-// 	lines := [
-// 		'ABC',
-// 		'123',
-// 	]
-// 	expect := [
-// 		'A1',
-// 		'B2',
-// 		'C3',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_simple() {
+	lines := [
+		'ABC',
+		'123',
+	]
+	expect := [
+		'A1',
+		'B2',
+		'C3',
+	]
+	assert transpose(lines) == expect
+}
 
-// fn test_single_line() {
-// 	lines := [
-// 		'Single line.',
-// 	]
-// 	expect := [
-// 		'S',
-// 		'i',
-// 		'n',
-// 		'g',
-// 		'l',
-// 		'e',
-// 		' ',
-// 		'l',
-// 		'i',
-// 		'n',
-// 		'e',
-// 		'.',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_single_line() {
+	lines := [
+		'Single line.',
+	]
+	expect := [
+		'S',
+		'i',
+		'n',
+		'g',
+		'l',
+		'e',
+		' ',
+		'l',
+		'i',
+		'n',
+		'e',
+		'.',
+	]
+	assert transpose(lines) == expect
+}
 
 fn test_first_line_longer_than_second_line() {
 	lines := [
@@ -143,80 +143,80 @@ fn test_mixed_line_length() {
 	assert transpose(lines) == expect
 }
 
-// fn test_square() {
-// 	lines := [
-// 		'HEART',
-// 		'EMBER',
-// 		'ABUSE',
-// 		'RESIN',
-// 		'TREND',
-// 	]
-// 	expect := [
-// 		'HEART',
-// 		'EMBER',
-// 		'ABUSE',
-// 		'RESIN',
-// 		'TREND',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_square() {
+	lines := [
+		'HEART',
+		'EMBER',
+		'ABUSE',
+		'RESIN',
+		'TREND',
+	]
+	expect := [
+		'HEART',
+		'EMBER',
+		'ABUSE',
+		'RESIN',
+		'TREND',
+	]
+	assert transpose(lines) == expect
+}
 
-// fn test_rectangle() {
-// 	lines := [
-// 		'FRACTURE',
-// 		'OUTLINED',
-// 		'BLOOMING',
-// 		'SEPTETTE',
-// 	]
-// 	expect := [
-// 		'FOBS',
-// 		'RULE',
-// 		'ATOP',
-// 		'CLOT',
-// 		'TIME',
-// 		'UNIT',
-// 		'RENT',
-// 		'EDGE',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_rectangle() {
+	lines := [
+		'FRACTURE',
+		'OUTLINED',
+		'BLOOMING',
+		'SEPTETTE',
+	]
+	expect := [
+		'FOBS',
+		'RULE',
+		'ATOP',
+		'CLOT',
+		'TIME',
+		'UNIT',
+		'RENT',
+		'EDGE',
+	]
+	assert transpose(lines) == expect
+}
 
-// fn test_triangle() {
-// 	lines := [
-// 		'T',
-// 		'EE',
-// 		'AAA',
-// 		'SSSS',
-// 		'EEEEE',
-// 		'RRRRRR',
-// 	]
-// 	expect := [
-// 		'TEASER',
-// 		' EASER',
-// 		'  ASER',
-// 		'   SER',
-// 		'    ER',
-// 		'     R',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_triangle() {
+	lines := [
+		'T',
+		'EE',
+		'AAA',
+		'SSSS',
+		'EEEEE',
+		'RRRRRR',
+	]
+	expect := [
+		'TEASER',
+		' EASER',
+		'  ASER',
+		'   SER',
+		'    ER',
+		'     R',
+	]
+	assert transpose(lines) == expect
+}
 
-// fn test_jagged_triangle() {
-// 	lines := [
-// 		'11',
-// 		'2',
-// 		'3333',
-// 		'444',
-// 		'555555',
-// 		'66666',
-// 	]
-// 	expect := [
-// 		'123456',
-// 		'1 3456',
-// 		'  3456',
-// 		'  3 56',
-// 		'    56',
-// 		'    5',
-// 	]
-// 	assert transpose(lines) == expect
-// }
+fn test_jagged_triangle() {
+	lines := [
+		'11',
+		'2',
+		'3333',
+		'444',
+		'555555',
+		'66666',
+	]
+	expect := [
+		'123456',
+		'1 3456',
+		'  3456',
+		'  3 56',
+		'    56',
+		'    5',
+	]
+	assert transpose(lines) == expect
+}
