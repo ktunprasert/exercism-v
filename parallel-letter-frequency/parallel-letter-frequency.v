@@ -8,11 +8,11 @@ fn calculate_frequencies(texts []string) map[rune]int {
 	for text in texts {
 		handles << spawn fn (t string, ch chan &map[rune]int) {
 			mut freq := map[rune]int{}
-			for c in t.runes() {
+			for c in t.to_lower().runes() {
 				if c.length_in_bytes() > 1 {
 					freq[c]++
 				} else if c.bytes().all(it.is_letter()) {
-					freq[c.to_lower()]++
+					freq[c]++
 				}
 			}
 			ch <- &freq
