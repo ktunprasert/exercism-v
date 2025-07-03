@@ -7,12 +7,11 @@ mut:
 
 struct RobotIterator {
 mut:
-	name   chan string
-	worker thread
+	name_ch chan string
 }
 
 fn (mut ri RobotIterator) init() {
-	ri.worker = go worker(ri.name)
+	go worker(ri.name_ch)
 }
 
 fn worker(ch chan string) {
@@ -37,10 +36,10 @@ fn create_robot_storage() RobotIterator {
 }
 
 fn create_robot(mut robots RobotIterator) Robot {
-	name := <-robots.name or { panic(err) }
+	name := <-robots.name_ch or { panic(err) }
 	return Robot{name}
 }
 
 fn (mut r Robot) reset(mut robots RobotIterator) {
-	r.name = <-robots.name or { panic(err) }
+	r.name = <-robots.name_ch or { panic(err) }
 }
