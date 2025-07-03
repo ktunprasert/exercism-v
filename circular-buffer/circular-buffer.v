@@ -39,5 +39,6 @@ pub fn (mut b CircularBuffer[T]) overwrite(value T) {
 }
 
 pub fn (mut b CircularBuffer[T]) clear() {
-	b.t_chan = chan T{cap: b.capacity}
+    for { b.read() or { break } }
+	// b.t_chan = chan T{cap: b.capacity}
 }
