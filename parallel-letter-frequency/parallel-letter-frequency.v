@@ -1,43 +1,34 @@
 module main
 
-fn worker(mut freqmap map[rune]int, rune_ch chan rune) {
-	// for c := <-rune_ch {
-	for {
-		c := <-rune_ch or { break }
-		freqmap[c]++
-	}
-}
-
 fn calculate_frequencies(texts []string) map[rune]int {
 	mut freqmap := map[rune]int{}
-	rune_ch := chan rune{}
+	mut handles := []thread{}
+	result_ch := chan &map[rune]int{cap: texts.len}
 
-	spawn worker(mut &freqmap, rune_ch)
-
-	// worker := spawn
 	for text in texts {
-		for c in text {
-			rune_ch <- c
+		handles << spawn fn (t string, ch chan &map[rune]int) {
+			mut freq := map[rune]int{}
+			for c in t.runes() {
+				if c.length_in_bytes() > 1 {
+					freq[c]++
+				} else if c.bytes().all(it.is_letter()) {
+					freq[c.to_lower()]++
+				}
+			}
+			ch <- &freq
+		}(text, result_ch)
+	}
+
+	handles.wait()
+	result_ch.close()
+
+	for {
+		result := <-result_ch or { break }
+
+		for key, count in result {
+			freqmap[key] += count
 		}
 	}
-	rune_ch.close()
-
-	// mut mu := sync.new_rwmutex()
-	// for text in texts {
-	// 	f := spawn fn [mut freqmap, mut mu] (t string) {
-	// 		mu.lock()
-	// 		defer { mu.unlock() }
-
-	// 		for c in t {
-	// 			freqmap[c]++
-	// 		}
-	// 	}(text)
-
-	// 	f.wait()
-	// }
-	// println(freqmap)
-
-	// worker.wait()
 
 	return freqmap
 }
