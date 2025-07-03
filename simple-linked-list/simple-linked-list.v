@@ -1,18 +1,14 @@
 module main
 
-struct Empty {}
-
 struct Node {
 	data int
 mut:
-	next Leaf
+	next &Node = unsafe { nil }
 }
-
-type Leaf = Node | Empty
 
 struct LinkedList {
 mut:
-	node Leaf
+	node &Node = unsafe { nil }
 	len  int
 }
 
@@ -35,121 +31,84 @@ fn (list LinkedList) is_empty() bool {
 }
 
 fn (mut list LinkedList) push(data int) {
-    mut node := list.node
-    if node is Empty {
-        list.node = Node{data, Empty{}}
-        list.len++
-        return
-    }
+	if list.is_empty() {
+		list.node = &Node{
+			data: data
+		}
+		list.len = 1
+		return
+	}
 
-    for node !is Empty {
-        tmp := node.next or { Empty{} }
-    }
+	mut node := list.node
+	unsafe {
+		for {
+			if node.next == nil {
+				break
+			}
 
-// for mut node := list.node; node is Node == true; node = node.next {
-//     }
-
-    // for mut node = list.node; node !is Empty; node = node.next {
-
-    // }
-
-	// mut node := list.node
-	// for {
-	// 	match node.next {
-	// 		Empty {
-	// 			break
-	// 		}
-	// 		Node {
-	// 			node = node.next
-	// 		}
-	// 		else {}
-	// 	}
-	// }
-
-	// // defer { println('push data=${data} list=${list}') }
-	// if list.is_empty() {
-	// 	list.node = &Node{data, none}
-	// 	list.len++
-	// 	return
-	// }
-
-	// unsafe {
-	// 	mut node := list.node or { nil }
-
-	// 	for {
-	// 		tmp := node.next or { nil }
-	// 		if tmp == nil {
-	// 			break
-	// 		}
-
-	// 		list.len++
-	// 		node = tmp
-	// 	}
-
-	// 	node.next = &Node{data, none}
-	// }
+			node = node.next
+		}
+	}
+	node.next = &Node{
+		data: data
+	}
+	list.len++
 }
 
 fn (mut list LinkedList) pop() ?int {
-	mut node := list.node?
+	if list.is_empty() {
+		return none
+	}
 
+	mut node := list.node
 	unsafe {
 		mut prev := node
 		for {
-			tmp := node.next or { nil }
-			if tmp == nil {
+			if node.next == nil {
 				break
 			}
 
 			prev = node
-			node = tmp
+			node = node.next
 		}
 
 		data := node.data
-		println('pop data=${data} list=${list} node=${node} prev=${prev}')
 		prev.next = nil
+		list.len--
+
+		if list.len == 0 {
+			list.node = nil
+		}
 
 		return data
 	}
-	// println('pop list=${list}')
-	// if list.len == 1 {
-	// 	node := list.node?
-	// 	list.len = 0
-	// 	list.node = none
-
-	// 	println('list.node=${list.node}')
-	// 	return node.data
-	// }
-
-	// node := list.node?
-	// v := node.data
-	// list.node = node.next?
-	// list.len--
-
-	// println('list.node=${list.node}')
-	// return v
 }
 
 fn (list LinkedList) peek() ?int {
-	return list.node?.data
+	unsafe {
+		if list.node == nil {
+			return none
+		}
+
+		return list.node.data
+	}
 }
 
 fn (list LinkedList) to_array() []int {
 	array := []int{cap: list.len}
 
+	mut node := list.node
 	unsafe {
-		mut node := list.node or { nil }
 		if node == nil {
 			return array
 		}
 
 		for {
-			node = node.next or { nil }
 			if node == nil {
 				break
 			}
-
 			array << node.data
+			node = node.next
 		}
 	}
 	return array
@@ -157,21 +116,27 @@ fn (list LinkedList) to_array() []int {
 
 fn (list LinkedList) reverse() LinkedList {
 	mut new_list := new()
+	mut data := []int{cap: list.len}
 
 	unsafe {
-		mut node := list.node or { nil }
+		mut node := list.node
 		if node == nil {
 			return new_list
 		}
 
 		for {
-			node = node.next or { nil }
 			if node == nil {
 				break
 			}
 
-			new_list.push(node.data)
+			data << node.data
+			node = node.next
 		}
 	}
+
+	for d in data.reverse() {
+		new_list.push(d)
+	}
+
 	return new_list
 }
