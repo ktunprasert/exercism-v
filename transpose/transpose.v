@@ -18,15 +18,7 @@ fn transpose(lines []string) []string {
 				continue
 			}
 
-			mut add_space := false
-			for idx := row_idx + 1; idx < lines.len; idx++ {
-				if col < lines[idx].len {
-					add_space = true
-					break
-				}
-			}
-
-			if add_space {
+			if lines[row_idx + 1..].any(it.len > col) {
 				new_line << ` `
 			}
 		}
