@@ -37,16 +37,16 @@ fn test_reset_robots_change_name() {
 	assert first_name != second_name
 }
 
-// fn test_lots_of_robots_have_different_names() {
-// 	mut robots := create_robot_storage()
-// 	mut names := []string{}
-// 	for _ in 0 .. 1000 {
-// 		r := create_robot(mut robots)
-// 		if r.name !in names {
-// 			names << r.name
-// 		} else {
-// 			assert false, "${r.name} found multiple times! that's not allowed"
-// 		}
-// 	}
-// 	assert true
-// }
+fn test_lots_of_robots_have_different_names() {
+	mut robots := create_robot_storage()
+	mut names := []string{}
+	for _ in 0 .. 1000 {
+		r := create_robot(mut robots)
+		if r.name !in names {
+			names << r.name
+		} else {
+			assert false, "${r.name} found multiple times! that's not allowed"
+		}
+	}
+	assert true
+}

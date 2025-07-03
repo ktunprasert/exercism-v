@@ -1,6 +1,7 @@
 module main
 
 struct Robot {
+mut:
 	name string
 }
 
@@ -37,14 +38,9 @@ fn create_robot_storage() RobotIterator {
 
 fn create_robot(mut robots RobotIterator) Robot {
 	name := <-robots.name or { panic(err) }
-    println(name)
 	return Robot{name}
 }
 
 fn (mut r Robot) reset(mut robots RobotIterator) {
-	// robots.name.close()
- //    robots.worker.wait()
-
-	// robots.name = chan string{}
-	// robots.init()
+	r.name = <-robots.name or { panic(err) }
 }
