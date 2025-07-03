@@ -1,31 +1,20 @@
 module main
 
+import arrays
+import encoding.utf8
+
+fn freqs(text string) map[rune]int {
+	return arrays.map_of_counts(text.to_lower().runes().filter(utf8.is_letter(it)))
+}
+
 fn calculate_frequencies(texts []string) map[rune]int {
+	threads := texts.map(spawn freqs(it))
 	mut freqmap := map[rune]int{}
-	mut handles := []thread map[rune]int{cap: texts.len}
-
-	for text in texts {
-		handles << spawn fn (t string) map[rune]int {
-			mut freq := map[rune]int{}
-			for c in t.to_lower().runes() {
-				if c.length_in_bytes() > 1 {
-					freq[c]++
-				} else if c.bytes().all(it.is_letter()) {
-					freq[c]++
-				}
-			}
-
-			return freq
-		}(text)
+	for freq in threads.wait() {
+        for key, count in freq {
+            freqmap[key] += count
+        }
 	}
 
-	data := handles.wait()
-
-	for result in data {
-		for key, count in result {
-			freqmap[key] += count
-		}
-	}
-
-	return freqmap
+    return freqmap
 }
