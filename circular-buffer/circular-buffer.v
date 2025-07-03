@@ -2,12 +2,12 @@ module main
 
 struct CircularBuffer[T] {
 mut:
-	t_chan chan T
-    capacity int
+	t_chan   chan T
+	capacity int
 }
 
 fn (b CircularBuffer[T]) is_full() bool {
-    return b.t_chan.len == b.capacity
+	return b.t_chan.len == b.capacity
 }
 
 pub fn create_buffer[T](capacity int) CircularBuffer[T] {
@@ -32,13 +32,15 @@ pub fn (mut b CircularBuffer[T]) read() !T {
 
 pub fn (mut b CircularBuffer[T]) overwrite(value T) {
 	if b.is_full() {
-        b.read() or { return }
+		b.read() or { return }
 	}
 
 	b.write(value) or { return }
 }
 
 pub fn (mut b CircularBuffer[T]) clear() {
-    for { b.read() or { break } }
+	for {
+		b.read() or { break }
+	}
 	// b.t_chan = chan T{cap: b.capacity}
 }
