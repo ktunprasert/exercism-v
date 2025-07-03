@@ -9,7 +9,7 @@ fn is_isogram(word string) bool {
 			continue
 		}
 
-		if found[c] || false {
+		if c in found {
 			return false
 		}
 
