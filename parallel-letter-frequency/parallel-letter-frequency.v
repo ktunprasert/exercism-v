@@ -2,11 +2,10 @@ module main
 
 fn calculate_frequencies(texts []string) map[rune]int {
 	mut freqmap := map[rune]int{}
-	mut handles := []thread{}
-	result_ch := chan &map[rune]int{cap: texts.len}
+	mut handles := []thread map[rune]int{cap: texts.len}
 
 	for text in texts {
-		handles << spawn fn (t string, ch chan &map[rune]int) {
+		handles << spawn fn (t string) map[rune]int {
 			mut freq := map[rune]int{}
 			for c in t.to_lower().runes() {
 				if c.length_in_bytes() > 1 {
@@ -15,16 +14,14 @@ fn calculate_frequencies(texts []string) map[rune]int {
 					freq[c]++
 				}
 			}
-			ch <- &freq
-		}(text, result_ch)
+
+			return freq
+		}(text)
 	}
 
-	handles.wait()
-	result_ch.close()
+	data := handles.wait()
 
-	for {
-		result := <-result_ch or { break }
-
+	for result in data {
 		for key, count in result {
 			freqmap[key] += count
 		}
